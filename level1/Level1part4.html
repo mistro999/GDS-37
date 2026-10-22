@@ -35,14 +35,11 @@ function animate() {
   ctx.fill();
   ctx.closePath();
   
-  // Right wall bounce
   if (ball.x + ball.radius > canvas.width) {
-    ball.x = canvas.width;
-    ball.x -= ball.radius;
+    ball.x = canvas.width - ball.radius;
     ball.vx = -ball.vx;
   }
   
-  // Left wall bounce
   if (ball.x - ball.radius < 0) {
     ball.x = ball.radius;
     ball.vx = -ball.vx;
