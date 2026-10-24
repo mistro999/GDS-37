@@ -25,6 +25,18 @@ function animate()
 	}
 	
 	checkBoundaries(player, canvas);
+	checkPaddleCollision(ball, player); // Added to process the collision detection
 	
+	ball.x += ballVx;
+	ball.y += ballVy;
+
+	if (ball.x <= 0 || ball.x >= canvas.width) {
+		ballVx *= -1;
+	}
+	if (ball.y <= 0 || ball.y >= canvas.height) {
+		ballVy *= -1;
+	}
+
 	player.drawRect(context);
+	ball.drawCircle(context);
 }
