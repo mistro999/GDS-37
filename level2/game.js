@@ -1,13 +1,30 @@
-var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
+var canvas;
+var context;
+var timer;
+var interval = 1000/60;
+var player;
 
-var player1 = new GameObject("Player", 30, 180, 20, 100, "#5D3FD3");
+canvas = document.getElementById("gameCanvas");
+context = canvas.getContext("2d");	
 
-function animate() {
+player = new GameObject("Player", 30, 180, 20, 100, "#5D3FD3");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    player1.drawRect(ctx); 
+timer = setInterval(animate, interval);
+
+function animate()
+{
+	context.clearRect(0,0,canvas.width, canvas.height);	
+	
+	if(keysPressed.w)
+	{
+		player.y -= 6;
+	}
+	if(keysPressed.s)
+	{
+		player.y += 6;
+	}
+	
+	checkBoundaries(player, canvas);
+	
+	player.drawRect(context);
 }
-
-setInterval(animate, 1000 / 60);
