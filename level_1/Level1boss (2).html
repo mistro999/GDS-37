@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Ball Animation</title>
+  <style>
+    canvas {
+      background-color: #eeeef5;
+      border: 2px solid #363c47;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="600" height="400"></canvas>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    
+    var ball = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 20,
+      vx: 2,
+      vy: 2,
+      speedMultiplier: 1.1,
+      maxSpeed: 15,
+      color: "#ff4757"
+    };
+
+    var mainTimer = setInterval(animate, 1000 / 60);
+
+    function changeColor() {
+      var colors = ["#ff4757", "#2ed573", "#1e90ff", "#ffa502", "#9b59b6", "#00d2d3"];
+      var randomColor = colors[Math.floor(Math.random() * colors.length)];
+      if (randomColor === ball.color) {
+        changeColor();
+      } else {
+        ball.color = randomColor;
+      }
+    }
+
+    function handleBounce(velocityKey) {
+      var newVel = -ball[velocityKey] * ball.speedMultiplier;
+      
+      if (Math.abs(newVel) > ball.maxSpeed) {
+        ball[velocityKey] = newVel > 0 ? ball.maxSpeed : -ball.maxSpeed;
+      } else {
+        ball[velocityKey] = newVel;
+      }
+      
+      changeColor();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      if (ball.x - ball.radius < 0) {
+        ball.x = ball.radius;
+        handleBounce('vx');
+      } else if (ball.x + ball.radius >= canvas.width) {
+        ball.x = canvas.width - ball.radius;
+        handleBounce('vx');
+      }
+
+      if (ball.y - ball.radius < 0) {
+        ball.y = ball.radius;
+        handleBounce('vy');
+      } else if (ball.y + ball.radius >= canvas.height) {
+        ball.y = canvas.height - ball.radius;
+        handleBounce('vy');
+      }
+
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = ball.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+  </script>
+</body>
+</html>
