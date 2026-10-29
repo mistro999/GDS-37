@@ -78,25 +78,26 @@ timer = setInterval(animate, interval);
 function animate() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Player movement
     if (keysPressed.w) { player.y -= 6; }
     if (keysPressed.s) { player.y += 6; }
 
     checkBoundaries(player, canvas);
-    
     updateEdges(player);
 
+    // Ball movement
     ball.x += ballVx;
     ball.y += ballVy;
-    
     updateEdges(ball);
 
-    if (ball.x <= 0 || ball.x >= canvas.width - ball.width) { 
+    if (ball.x <= 0 || ball.x >= canvas.width - ball.width) {
         ballVx *= -1; 
     }
-    if (ball.y <= 0 || ball.y >= canvas.height - ball.height) { 
+    if (ball.y <= 0 || ball.y >= canvas.height - ball.height) {
         ballVy *= -1; 
     }
 
     player.drawRect(context);
     ball.drawCircle(context);
 }
+
