@@ -1,5 +1,9 @@
 function GameObject(name, x, y, width, height, color) {
     this.name = name;
+    this.top = y;
+    this.bottom = y + height;
+    this.left = x;
+    this.right = x + width; 
     this.x = x;
     this.y = y;
     
