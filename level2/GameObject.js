@@ -11,9 +11,18 @@ function GameObject(name, x, y, width, height, color) {
     if (name === "Ball" || name === "ball") {
         this.width = width || 20;
         this.height = height || 20;
+        this.top = top || 20;
+        this.bottom = bottom || 20;
+        this.left = left || 20;
+        this.right = right || 20;
     } else {
         this.width = width || 20;   
         this.height = height || 100; 
+        this.height = height || 20;
+        this.top = top || 20;
+        this.bottom = bottom || 20;
+        this.left = left || 20;
+        this.right = right || 20;
     }
     
     this.color = color || "#5D3FD3"; 
@@ -21,7 +30,7 @@ function GameObject(name, x, y, width, height, color) {
 
 GameObject.prototype.drawRect = function(context) {
     context.fillStyle = this.color;
-    context.fillRect(this.x, this.y, this.width, this.height);
+    context.fillRect(this.x, this.y, this.width, this.height, this.top, this.bottom, this.left, this.right);
 };
 
 GameObject.prototype.drawCircle = function(context) {
