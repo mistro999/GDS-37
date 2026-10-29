@@ -1,45 +1,27 @@
-function checkBoundaries(object, canvas)
-{
-	if (object.y < 0) 
-	{
-		object.y = 0;
-	}
-	if (object.y + object.height > canvas.height) 
-	{ 
-		object.y = canvas.height - object.height;
-	}
+// collision.js
+
+// SEPARATE FUNCTION: Call this ONLY on the paddle inside your animation loop
+function checkBoundaries(object, canvas) {
+    if (object.y < 0) {
+        object.y = 0;
+    }
+    if (object.y + object.height > canvas.height) { 
+        object.y = canvas.height - object.height;
+    }
+    // Note: Do NOT add an object.x check here, or the ball will get stuck!
 }
 
-// Bounding Box collision method
+// SEPARATE FUNCTION: Call this on the ball and paddle inside your animation loop
 function checkPaddleCollision(ball, paddle) {
     if (ball.x < paddle.x + paddle.width &&
         ball.x + ball.width > paddle.x &&
         ball.y < paddle.y + paddle.height &&
         ball.y + ball.height > paddle.y) {
 
-        ballVy *= -1; 
+        // 1. Swapped to horizontal inversion so it bounces off a side paddle
+        ballVx *= -1; 
         
-        // Prevent clipping by snapping the ball right above the paddle
-        ball.y = paddle.y - ball.height; 
+        // 2. Changed from y-snapping to x-snapping to prevent the ball from glitching to the top
+        ball.x = paddle.x + paddle.width; 
     }
-}
-
-// 2. Completed animation loop with the conditional check
-function animationLoop() {
-    // Clear the screen for the new frame
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Move the ball
-    ball.x += ballVx;
-    ball.y += ballVy;
-    
-    // Check for collisions using your conditional statements
-    checkPaddleCollision(ball, paddle);
-    checkBoundaries(ball, canvas);
-    
-    context.fillRect(ball.x, ball.y, ball.width, ball.height);
-    context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-    
-    // Keep the animation looping
-    requestAnimationFrame(animationLoop);
 }

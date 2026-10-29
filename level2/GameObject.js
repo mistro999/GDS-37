@@ -11,28 +11,6 @@ function GameObject(name, x, y, width, height, color) {
         this.height = height || 100;
     }
 
-    // Dynamic methods returning each side
-    this.top = function() {
-        return this.y;
-    };
-    this.bottom = function() {
-        return this.y + this.height;
-    };
-    this.left = function() {
-        return this.x;
-    };
-    this.right = function() {
-        return this.x + this.width;
-    };
-
-    // Axis-Aligned Bounding Box (AABB) collision detection
-    this.collidesWith = function(other) {
-        return this.left() < other.right() &&
-               this.right() > other.left() &&
-               this.top() < other.bottom() &&
-               this.bottom() > other.top();
-    };
-
     this.drawRect = function(context) {
         context.fillStyle = this.color;
         context.fillRect(this.x, this.y, this.width, this.height);
@@ -47,22 +25,29 @@ function GameObject(name, x, y, width, height, color) {
     };
 }
 
+// SEPARATE FUNCTION: Only run this on the paddle! Never pass the ball to it.
 function checkBoundaries(object, canvas) {
     if (object.y < 0) {
         object.y = 0;
     }
-    if (object.y + object.height > canvas.height) {
+    if (object.y + object.height > canvas.height) { 
         object.y = canvas.height - object.height;
     }
 }
 
-function updateEdges(object) {
-    // Keep this helper functional if other code depends on static properties,
-    // though the new side functions run dynamically.
-    object.staticTop = object.y;
-    object.staticBottom = object.y + object.height;
-    object.staticLeft = object.x;
-    object.staticRight = object.x + object.width;
+// SEPARATE FUNCTION: Fixed paddle collision for horizontal bounce
+function checkPaddleCollision(ball, paddle) {
+    if (ball.x < paddle.x + paddle.width &&
+        ball.x + ball.width > paddle.x &&
+        ball.y < paddle.y + paddle.height &&
+        ball.y + ball.height > paddle.y) {
+
+        // Reverse horizontal direction
+        ballVx *= -1; 
+        
+        // Push the ball out of the paddle so it doesn't get stuck bouncing inside it
+        ball.x = paddle.x + paddle.width; 
+    }
 }
 
 var keysPressed = { w: false, s: false };
@@ -85,66 +70,66 @@ addEventListener('keyup', function(event) {
     }
 });
 
-var canvas;
-var context;
-var interval = 1000/60;
-var player;
+var canvas = document.getElementById("gameCanvas");
+var context = canvas.getContext("2d");
 
-canvas = document.getElementById("gameCanvas");
-context = canvas.getContext("2d");
-
-player = new GameObject("Player", 30, 180, 20, 100, "#6042d6");
+var paddle = new GameObject("Player", 30, 180, 20, 100, "#6042d6");
 var ball = new GameObject("Ball", 200, 100, 20, 20, "#6042d6");
-var ballVx = 4;
+var ballVx = -4; // Starts moving left toward the paddle
 var ballVy = 4;
 
-// The animate function containing paddle movement, wall limits, and collision physics
-function animate() {
-    // Clear canvas
+function animationLoop() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Move player paddle
+    
+    // Paddle Movement
     if (keysPressed.w) {
-        player.y -= 5;
+        paddle.y -= 5;
     }
     if (keysPressed.s) {
-        player.y += 5;
+        paddle.y += 5;
     }
-    checkBoundaries(player, canvas);
-
-    // Move ball
+    checkBoundaries(paddle, canvas); // ONLY bound the paddle
+    
+    // Ball Movement
     ball.x += ballVx;
     ball.y += ballVy;
-
-    // Bounce ball off top and bottom screen walls
-    if (ball.top() <= 0 || ball.bottom() >= canvas.height) {
-        ballVy = -ballVy;
+    
+    // Run paddle collision
+    checkPaddleCollision(ball, paddle);
+    
+    // --- WALL PHYSICS ---
+    
+    // Bounce off Top Wall
+    if (ball.y < 0) {
+        ball.y = 0;
+        ballVy *= -1;
+    }
+    // Bounce off Bottom Wall
+    if (ball.y + ball.height > canvas.height) {
+        ball.y = canvas.height - ball.height;
+        ballVy *= -1;
+    }
+    
+    // Bounce off Right Wall
+    if (ball.x + ball.width > canvas.width) {
+        ball.x = canvas.width - ball.width;
+        ballVx *= -1;
     }
 
-    // Bounce ball off right screen wall (assuming single-player practice style)
-    if (ball.right() >= canvas.width) {
-        ballVx = -ballVx;
-    }
-
-    // Ball bounces off the paddle using the bounding box collision method
-    if (ball.collidesWith(player)) {
-        // Reverse direction
-        ballVx = -ballVx;
-        // Shift ball to front edge of paddle to prevent sticky duplicate hits
-        ball.x = player.right();
-    }
-
-    // Reset ball if it slips past the player paddle on the left wall
-    if (ball.left() <= 0) {
+    // THE LEFT WALL RULE: Completely ignore x < 0 wall bounds.
+    // If the ball's entire body goes past the left edge, reset it to center.
+    if (ball.x + ball.width < 0) {
         ball.x = canvas.width / 2;
         ball.y = canvas.height / 2;
-        ballVx = 4; 
+        ballVx = -4; // Direct back toward player paddle
     }
-
-    // Render game frames
-    player.drawRect(context);
+    
+    // Render
+    paddle.drawRect(context);
     ball.drawCircle(context);
+    
+    requestAnimationFrame(animationLoop);
 }
 
-// Start the game animation loop
-var timer = setInterval(animate, interval);
+// Fire up the engine
+requestAnimationFrame(animationLoop);
