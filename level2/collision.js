@@ -10,7 +10,7 @@ function checkPaddleCollision(ball, paddle) {
 
         // Ball hits top third
         if (ballCenterY < paddle.y + (paddle.height / 3)) {
-            ballVx = 4; 
+            ballVx = 4;   // Positive speed (moves right)
             ballVy = -4; 
         }
         // Ball hits lower third
