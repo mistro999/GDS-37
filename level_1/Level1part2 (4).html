@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Ball Animation</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+
+        function Ball(x, y, width, height, color, force, vx, vy) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.color = color;
+            this.force = force;
+            this.vx = vx;
+            this.vy = vy;
+
+            this.draw = function() {
+                context.save();
+                context.translate(this.x, this.y);
+                context.beginPath();
+                context.arc(0, 0, this.width / 2, 0, 360 * Math.PI / 180, true);
+                context.closePath();
+                context.fillStyle = this.color;
+                context.fill();
+                context.restore();
+            };
+
+            this.move = function() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x - this.width / 2 < 0 || this.x + this.width / 2 > canvas.width) {
+                    this.vx = -this.vx;
+                }
+                if (this.y - this.height / 2 < 0 || this.y + this.height / 2 > canvas.height) {
+                    this.vy = -this.vy;
+                }
+            };
+        }
+
+        var ball = new Ball(400, 300, 50, 50, "red", 0, 4, 4);
+
+        function animate() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ball.move();
+            ball.draw();
+            
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+
+</body>
+</html>

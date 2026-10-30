@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas Ball Animation</title>
+<style>
+body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f0f0; }
+canvas { background-color: #ffffff; border: 2px solid #2d2c2c; }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="600" height="400"></canvas>
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+var ball = { 
+  x: canvas.width / 2, 
+  y: canvas.height / 2, 
+  radius: 20, 
+  vx: 4 
+};
+
+var mainTimer = setInterval(animate, 1000 / 60);
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  ball.x += ball.vx;
+  
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+  ctx.fillStyle = "#ff4757";
+  ctx.fill();
+  ctx.closePath();
+  
+  if (ball.x + ball.radius > canvas.width) {
+    ball.x = canvas.width - ball.radius;
+    ball.vx = -ball.vx;
+  }
+  
+  if (ball.x - ball.radius < 0) {
+    ball.x = ball.radius;
+    ball.vx = -ball.vx;
+  }
+}
+</script>
+</body>
+</html>
