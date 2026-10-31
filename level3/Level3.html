@@ -6,6 +6,13 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
     <title>Level 2</title> 
     <style> 
+        #scoreboard {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
         canvas { 
             background-color: #e2dcdc; 
             display: block; 
@@ -14,14 +21,17 @@
     </style>
 </head>
 <body> 
-    <canvas id="gameCanvas" width="800" height="600"></canvas> 
-    <strong>Controls:</strong> <br>
-    Player 1: W (up), S (down) <br>
-    <script src="GameObject.js"></script> 
-    
-    <script src="contorl.js"></script> 
-    <script src="collision.js"></script>
+    <body> 
+    <!-- Visual Scoreboard -->
+    <div id="scoreboard">Player 1: <span id="p1Score">0</span> 
+    </div>
+    <div id="scoreboard">Player 2: <span id="p2Score">0</span></div>
 
-<script src="game.js"></script> 
+    <canvas id="gameCanvas" width="800" height="600"></canvas> 
+    
+    <script src="GameObject.js"></script> 
+    <script src="controls.js"></script> 
+    <script src="collision.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>

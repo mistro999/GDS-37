@@ -26,5 +26,9 @@ function checkPaddleCollision(ball, paddle) {
         
         // Push the ball out of the paddle so it doesn't get stuck
         ball.x = paddle.x + paddle.width; 
+
+        // --- ADD THESE TWO LINES TO UPDATE THE SCOREBOARD ---
+        score += 1; // Increase the global score counter by 1
+        document.getElementById('score').innerText = score; // Send the new score to your HTML
     }
 }

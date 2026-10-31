@@ -3,7 +3,6 @@ var context;
 var timer;
 var interval = 1000/60;
 var player;
-
 canvas = document.getElementById("gameCanvas");
 context = canvas.getContext("2d");	
 
