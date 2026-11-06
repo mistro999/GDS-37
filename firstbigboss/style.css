@@ -1,0 +1,19 @@
+/* Center everything on the page */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #111111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+/* Style the game screen container or canvas */
+canvas, #game-container {
+    border: 4px solid #615c5c;
+    background-color: #000000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
