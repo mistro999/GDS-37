@@ -7,7 +7,7 @@ let score = 0;
 // --- SUBCLASSES EXTENDING GAMEOBJECT ---
 class Paddle extends GameObject {
     constructor(x, y) {
-        super(x, y, 160, 25, "#28b5b5"); // Cyan bar from target mockup
+        super(x, y, 160, 25, "#40cbcb"); // Cyan bar from target mockup
         this.frictionX = 0.85;           // Dampens side movement over time
         this.speed = 1.5;                // Force of input acceleration
     }
