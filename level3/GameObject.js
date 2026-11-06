@@ -1,8 +1,9 @@
-function GameObject(name, x, y, width, height, color) {
+function GameObject(name, x, y, width, height, color, image) {
     this.name = name;
     this.x = x;
     this.y = y;
     this.color = color || "#6042d6";
+    this.image = image;
     if (name === "Ball" || name === "ball") {
         this.width = width || 20;
         this.height = height || 20;
@@ -10,24 +11,41 @@ function GameObject(name, x, y, width, height, color) {
         this.width = width || 20;
         this.height = height || 100;
     }
-    this.drawRect = function(context) {
+    this.drawRect = function (context) {
         context.fillStyle = this.color;
         context.fillRect(this.x, this.y, this.width, this.height);
     };
-    this.drawCircle = function(context) {
+    
+    this.drawImage = function (context) {
+        if (this.image) {
+            // modified sizing and centering math for Ric Flair's face
+            var scaleMultiplier = 1.25; // Scales him up slightly to bypass transparent borders
+            var imgWidth = (this.radius * 2) * scaleMultiplier;
+            var imgHeight = (this.radius * 2) * scaleMultiplier;
+
+            var imgX = this.x - (imgWidth / 2);
+            var imgY = this.y - (imgHeight / 2);
+
+            // 3. ADDED: Draw the Ric Flair image onto the canvas
+            context.drawImage(img,this.x - 100/2,this.y - 100/2,100, 100);
+        }
+    }
+
+    this.drawCircle = function (context) {
         context.fillStyle = this.color;
         context.beginPath();
-        context.arc(this.x + this.width/2, this.y + this.height/2, this.width/2, 0, Math.PI * 2);
+        context.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
         context.closePath();
         context.fill();
     };
-    this.top = function() { return this.y; };
-    this.bottom = function() { return this.y + this.height; };
-    this.left = function() { return this.x; };
-    this.right = function() { return this.x + this.width; };
-    this.intersects = function(other) {
+    this.top = function () { return this.y; };
+    this.bottom = function () { return this.y + this.height; };
+    this.left = function () { return this.x; };
+    this.right = function () { return this.x + this.width; };
+    this.intersects = function (other) {
         return this.left() < other.right() && this.right() > other.left() && this.top() < other.bottom() && this.bottom() > other.top();
     };
+
 }
 
 function checkBoundaries(object, canvas) {
@@ -46,14 +64,14 @@ var keysPressed = {
     ArrowDown: false
 };
 
-addEventListener('keydown', function(event) {
+addEventListener('keydown', function (event) {
     if (event.key === 'w' || event.key === 'W') { keysPressed.w = true; }
     if (event.key === 's' || event.key === 'S') { keysPressed.s = true; }
     if (event.key === 'ArrowUp') { keysPressed.ArrowUp = true; }
     if (event.key === 'ArrowDown') { keysPressed.ArrowDown = true; }
 });
 
-addEventListener('keyup', function(event) {
+addEventListener('keyup', function (event) {
     if (event.key === 'w' || event.key === 'W') { keysPressed.w = false; }
     if (event.key === 's' || event.key === 'S') { keysPressed.s = false; }
     if (event.key === 'ArrowUp') { keysPressed.ArrowUp = false; }
@@ -63,9 +81,13 @@ addEventListener('keyup', function(event) {
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
+
+var img = document.getElementById("ric");
+
+
 var paddle = new GameObject("Player1", 30, 180, 20, 100, "#6042d6");
 var paddle2 = new GameObject("Player2", canvas.width - 50, 180, 20, 100, "#6042d6");
-var ball = new GameObject("Ball", 400, 220, 20, 20, "#6042d6");
+var ball = new GameObject("Ball", 400, 220, 20, 20, "#6042d6", img);
 
 var ballVx = -4;
 var ballVy = 0;
@@ -130,19 +152,20 @@ function animationLoop() {
         ballVy = 0;
     }
 
-    
-	context.strokeStyle = "#000000";
-	context.lineWidth = 4;
-	context.beginPath();
-	context.moveTo(canvas.width / 2, 0);
-	context.lineTo(canvas.width / 2, canvas.height);
-	context.stroke();
+
+    context.strokeStyle = "#000000";
+    context.lineWidth = 4;
+    context.beginPath();
+    context.moveTo(canvas.width / 2, 0);
+    context.lineTo(canvas.width / 2, canvas.height);
+    context.stroke();
 
 
-    
+
     paddle.drawRect(context);
     paddle2.drawRect(context);
     ball.drawCircle(context);
+    ball.drawImage(context); // Draw the Ric Flair image instead of the ball
 
 
 

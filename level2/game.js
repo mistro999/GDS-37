@@ -3,6 +3,10 @@ var context;
 var timer;
 var interval = 1000/60;
 var player;
+
+// 1. ADDED: Global Variable for Ric Flair's image
+var img = document.getElementById("ric");
+
 canvas = document.getElementById("gameCanvas");
 context = canvas.getContext("2d");	
 
@@ -37,5 +41,15 @@ function animate()
 	}
 
 	player.drawRect(context);
-	ball.drawCircle(context);
+
+	// modified the sizing and centering math for Ric Flair's face
+	var scaleMultiplier = 1.25; // Scales him up slightly to bypass transparent borders
+	var imgWidth = (ball.radius * 2) * scaleMultiplier;
+	var imgHeight = (ball.radius * 2) * scaleMultiplier;
+
+	var imgX = ball.x - (imgWidth / 2);
+	var imgY = ball.y - (imgHeight / 2);
+
+	// 3. ADDED: Draw the Ric Flair image onto the canvas
+	context.drawImage(img, imgX, imgY, imgWidth, imgHeight);
 }
