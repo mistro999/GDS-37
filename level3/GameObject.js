@@ -130,9 +130,21 @@ function animationLoop() {
         ballVy = 0;
     }
 
+    
+	context.strokeStyle = "#000000";
+	context.lineWidth = 4;
+	context.beginPath();
+	context.moveTo(canvas.width / 2, 0);
+	context.lineTo(canvas.width / 2, canvas.height);
+	context.stroke();
+
+
+    
     paddle.drawRect(context);
     paddle2.drawRect(context);
     ball.drawCircle(context);
+
+
 
     requestAnimationFrame(animationLoop);
 }

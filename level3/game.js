@@ -30,10 +30,7 @@ timer = setInterval(animate, interval);
 function animate() {
 	// Clear the canvas first
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.save();	
-	
-	//ctx.restore();
-	
+
 	// Paddle movement
 	if (keysPressed.w) {
 		player.y -= 6;
@@ -79,25 +76,18 @@ function animate() {
 	}
 
 	// Draw game objects
-	player.drawRect(ctx);
-	ball.drawCircle(ctx);
+	//player.drawRect(ctx);
+	//ball.drawCircle(ctx);
 
 	// SCOREBOARD TEXT
-	ctx.save();
+
 	ctx.font = "16px monospace";
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	ctx.fillText("Player 1 | Player 2", canvas.width / 2, 30);
 	ctx.fillText(p1Score + "-" + p2Score, canvas.width / 2, 50);
-	ctx.restore();
 
-	ctx.fillStyle = "yellow";
-	ctx.lineWidth = 4;
-	ctx.beginPath();
-	ctx.moveTo(canvas.width / 2, 0);
-	ctx.lineTo(canvas.width / 2, canvas.height);
-	ctx.fill();
-	ctx.stroke();
+
 }
 
 // BALL RESET LOGIC ---
