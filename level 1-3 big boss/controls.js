@@ -24,4 +24,4 @@ window.Controls = {
         
         return !!keysPressed[key];
     }
-};
+};                          
